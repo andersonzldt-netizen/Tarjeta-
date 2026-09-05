@@ -67,14 +67,42 @@
             font-style: italic;
             margin-bottom: 20px;
         }
+        
+        /* Contenedor de la foto */
+        .photo-container {
+            margin: 0 auto 20px auto;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 4px solid white;
+            box-shadow: 0 5px 15px rgba(216, 27, 96, 0.3);
+            transition: transform 0.3s ease;
+        }
+        .photo-container:hover {
+            transform: scale(1.05);
+        }
+        .photo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Animación de revelación y brillo para el texto */
         .hidden-message {
             display: none;
             opacity: 0;
+            transform: translateY(20px);
             margin-top: 15px;
             padding-top: 15px;
             border-top: 1px dashed #f8bbd0;
-            transition: opacity 1.2s ease-in-out;
+            transition: opacity 1.5s ease, transform 1.5s ease;
             text-align: left;
+        }
+        .hidden-message.visible {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
         }
         .hidden-message p {
             font-family: 'Playfair Display', serif;
@@ -83,7 +111,13 @@
             color: #4a2e35;
             margin: 0;
             font-style: italic;
+            animation: brilloTexto 3s infinite alternate;
         }
+        @keyframes brilloTexto {
+            0% { text-shadow: 0 0 0px rgba(216, 27, 96, 0); }
+            100% { text-shadow: 0 0 8px rgba(255, 182, 193, 0.6); }
+        }
+
         .signature {
             display: block;
             margin-top: 15px;
@@ -123,8 +157,16 @@
         /* Sobres de recuerdos interactivos */
         .envelopes-section {
             display: none;
+            opacity: 0;
+            transform: translateY(15px);
             margin-top: 25px;
             text-align: left;
+            transition: opacity 1.2s ease 0.5s, transform 1.2s ease 0.5s;
+        }
+        .envelopes-section.visible {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
         }
         .envelopes-section h3 {
             font-family: 'Playfair Display', serif;
@@ -183,7 +225,7 @@
             box-shadow: 0 7px 20px rgba(173, 20, 87, 0.4);
         }
 
-        /* Reproductor de música sutil */
+        /* Reproductor de música */
         .music-player {
             margin-top: 15px;
             font-size: 0.85em;
@@ -221,8 +263,9 @@
 </head>
 <body>
 
-    <audio id="bg-music" loop>
-        <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf756.mp3?filename=romantic-guitars-112133.mp3" type="audio/mpeg">
+    <audio id="bg-music" loop preload="auto">
+        <source src="https://actions.google.com/sounds/v1/ambiences/coffee_shop.ogg" type="audio/ogg">
+        <source src="https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0a13f69d2.mp3?filename=romantic-piano-101art.mp3" type="audio/mpeg">
     </audio>
 
     <div class="card-container" id="tarjeta">
@@ -239,6 +282,11 @@
         <button class="main-btn" id="btn-revelar">Reabrir el momento 💌</button>
 
         <div class="hidden-message" id="mensaje-oculto">
+            
+            <div class="photo-container">
+                <img src="URL_DE_TU_FOTO_AQUÍ" alt="Foto juntos">
+            </div>
+
             <p>
                 ¿Recuerdas cuándo nos conocimos? Nunca olvidaré los nervios de tenerte frente a mí por primera vez. Nuestra primera cita, la primera vez compartiendo algo juntos y solo siendo nosotros, la emoción de estar junto a ti y saber que estaba en el lugar correcto, con la persona correcta. Fue una mezcla de destino con casualidad y no cambiaría nada de ese día. Le agradezco a la vida por tantos buenos momentos contigo, y hoy sigo amando cada parte tuya y cada parte nuestra.
             </p>
@@ -266,63 +314,55 @@
         </div>
 
         <div class="music-player">
-            <button class="music-toggle" id="btn-musica" onclick="toggleMusica()">🎵 Música ambiental: Pausada</button>
+            <button class="music-toggle" id="btn-musica" onclick="toggleMusica()">🎵 Activar música ambiental</button>
         </div>
     </div>
 
     <script>
-        // Fecha configurada: 8 de febrero de 2026 a las 00:00 hrs (mes 1 = febrero en JavaScript)
         const fechaInicio = new Date(2026, 1, 8, 0, 0);
 
         function actualizarContador() {
             const ahora = new Date();
             const diferencia = ahora - fechaInicio;
-
             if (diferencia < 0) {
                 document.getElementById("contador-tiempo").innerText = "¡Esperando el gran día!";
                 return;
             }
-
             const segundos = Math.floor(diferencia / 1000);
             const minutos = Math.floor(segundos / 60);
             const horas = Math.floor(minutos / 60);
             const dias = Math.floor(horas / 24);
             const anos = Math.floor(dias / 365);
-            
             const diasRestantes = dias % 365;
             const horasRestantes = horas % 24;
             const minutosRestantes = minutos % 60;
-
             let texto = "";
             if (anos > 0) texto += `${anos} años, `;
             texto += `${diasRestantes} días, ${horasRestantes}h y ${minutosRestantes}m`;
-
             document.getElementById("contador-tiempo").innerText = texto;
         }
         setInterval(actualizarContador, 1000);
         actualizarContador();
 
-        // Control de revelación de mensaje y sobres
         document.addEventListener("DOMContentLoaded", () => {
             const btnRevelar = document.getElementById("btn-revelar");
             const mensajeOculto = document.getElementById("mensaje-oculto");
             const seccionSobres = document.getElementById("seccion-sobres");
+            const musica = document.getElementById("bg-music");
 
             btnRevelar.addEventListener("click", () => {
-                mensajeOculto.style.display = "block";
-                seccionSobres.style.display = "block";
-                
-                setTimeout(() => {
-                    mensajeOculto.style.opacity = "1";
-                }, 50);
+                mensajeOculto.classList.add("visible");
+                seccionSobres.classList.add("visible");
 
                 btnRevelar.style.display = "none";
                 crearCorazones();
 
-                const musica = document.getElementById("bg-music");
+                // Intentamos reproducir la música al hacer clic en el botón principal
                 musica.play().then(() => {
-                    document.getElementById("btn-musica").innerText = "🎵 Música ambiental: Reproduciendo";
-                }).catch(() => {});
+                    document.getElementById("btn-musica").innerText = "🎵 Pausar música";
+                }).catch((error) => {
+                    console.log("Reproducción automática bloqueada por el navegador:", error);
+                });
             });
 
             function crearCorazones() {
@@ -363,11 +403,14 @@
             const boton = document.getElementById("btn-musica");
 
             if (musica.paused) {
-                musica.play();
-                boton.innerText = "🎵 Música ambiental: Reproduciendo";
+                musica.play().then(() => {
+                    boton.innerText = "🎵 Pausar música";
+                }).catch(e => {
+                    alert("Toca la pantalla o presiona el botón nuevamente para activar el audio.");
+                });
             } else {
                 musica.pause();
-                boton.innerText = "🎵 Música ambiental: Pausada";
+                boton.innerText = "🎵 Activar música";
             }
         }
     </script>
