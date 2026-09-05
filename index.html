@@ -225,24 +225,9 @@
             box-shadow: 0 7px 20px rgba(173, 20, 87, 0.4);
         }
 
-        /* Reproductor de música */
-        .music-player {
-            margin-top: 15px;
-            font-size: 0.85em;
-        }
-        .music-toggle {
-            background: transparent;
-            border: 1px solid #f8bbd0;
-            color: #ad1457;
-            padding: 6px 14px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.8em;
-            transition: all 0.2s;
-        }
-        .music-toggle:hover {
-            background: #f8bbd0;
-            color: white;
+        /* Reproductor de YouTube oculto */
+        .youtube-container {
+            display: none;
         }
 
         /* Animación de corazones flotantes */
@@ -263,9 +248,7 @@
 </head>
 <body>
 
-    <audio id="bg-music" loop preload="auto">
-        <source src="https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0a13f69d2.mp3?filename=romantic-piano-101art.mp3" type="audio/mpeg">
-    </audio>
+    <div class="youtube-container" id="youtube-box"></div>
 
     <div class="card-container" id="tarjeta">
         <div class="top-heart-badge">❤️</div>
@@ -312,8 +295,8 @@
             </div>
         </div>
 
-        <div class="music-player">
-            <button class="music-toggle" id="btn-musica" onclick="toggleMusica()">🎵 Reproducir música</button>
+        <div class="music-player" style="margin-top: 15px;">
+            <button class="music-toggle" onclick="reproducirYoutube()">🎵 Activar música (Manuel Medrano)</button>
         </div>
     </div>
 
@@ -347,7 +330,6 @@
             const btnRevelar = document.getElementById("btn-revelar");
             const mensajeOculto = document.getElementById("mensaje-oculto");
             const seccionSobres = document.getElementById("seccion-sobres");
-            const musica = document.getElementById("bg-music");
 
             btnRevelar.addEventListener("click", () => {
                 mensajeOculto.classList.add("visible");
@@ -356,11 +338,9 @@
                 btnRevelar.style.display = "none";
                 crearCorazones();
 
-                musica.play().then(() => {
-                    document.getElementById("btn-musica").innerText = "🎵 Pausar música";
-                }).catch((error) => {
-                    console.log("Reproducción automática bloqueada por el navegador:", error);
-                });
+                // Carga e inicia la canción oficial de Manuel Medrano en YouTube en bucle
+                let ytBox = document.getElementById("youtube-box");
+                ytBox.innerHTML = '<iframe width="0" height="0" src="https://www.youtube.com/embed/QCnXrfd40k0?autoplay=1&loop=1&playlist=QCnXrfd40k0" title="YouTube video player" frameborder="0" allow="autoplay"></iframe>';
             });
 
             function crearCorazones() {
@@ -396,20 +376,10 @@
             }
         }
 
-        function toggleMusica() {
-            const musica = document.getElementById("bg-music");
-            const boton = document.getElementById("btn-musica");
-
-            if (musica.paused) {
-                musica.play().then(() => {
-                    boton.innerText = "🎵 Pausar música";
-                }.catch(e => {
-                    alert("Toca la pantalla o presiona el botón nuevamente para activar la música.");
-                });
-            } else {
-                musica.pause();
-                boton.innerText = "🎵 Reproducir música";
-            }
+        function reproducirYoutube() {
+            let ytBox = document.getElementById("youtube-box");
+            ytBox.innerHTML = '<iframe width="0" height="0" src="https://www.youtube.com/embed/QCnXrfd40k0?autoplay=1&loop=1&playlist=QCnXrfd40k0" title="YouTube video player" frameborder="0" allow="autoplay"></iframe>';
+            alert("🎵 Reproduciendo 'Una y otra vez' de Manuel Medrano.");
         }
     </script>
 </body>
