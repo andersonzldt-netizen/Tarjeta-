@@ -264,7 +264,6 @@
 <body>
 
     <audio id="bg-music" loop preload="auto">
-        <source src="https://actions.google.com/sounds/v1/ambiences/coffee_shop.ogg" type="audio/ogg">
         <source src="https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0a13f69d2.mp3?filename=romantic-piano-101art.mp3" type="audio/mpeg">
     </audio>
 
@@ -314,7 +313,7 @@
         </div>
 
         <div class="music-player">
-            <button class="music-toggle" id="btn-musica" onclick="toggleMusica()">🎵 Activar música ambiental</button>
+            <button class="music-toggle" id="btn-musica" onclick="toggleMusica()">🎵 Reproducir música</button>
         </div>
     </div>
 
@@ -404,12 +403,12 @@
             if (musica.paused) {
                 musica.play().then(() => {
                     boton.innerText = "🎵 Pausar música";
-                }).catch(e => {
-                    alert("Toca la pantalla o presiona el botón nuevamente para activar el audio.");
+                }.catch(e => {
+                    alert("Toca la pantalla o presiona el botón nuevamente para activar la música.");
                 });
             } else {
                 musica.pause();
-                boton.innerText = "🎵 Activar música";
+                boton.innerText = "🎵 Reproducir música";
             }
         }
     </script>
