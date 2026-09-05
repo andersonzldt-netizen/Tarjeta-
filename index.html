@@ -284,7 +284,7 @@
         <div class="hidden-message" id="mensaje-oculto">
             
             <div class="photo-container">
-                <img src="URL_DE_TU_FOTO_AQUÍ" alt="Foto juntos">
+                <img src="foto.jpg" alt="Foto juntos">
             </div>
 
             <p>
@@ -357,7 +357,6 @@
                 btnRevelar.style.display = "none";
                 crearCorazones();
 
-                // Intentamos reproducir la música al hacer clic en el botón principal
                 musica.play().then(() => {
                     document.getElementById("btn-musica").innerText = "🎵 Pausar música";
                 }).catch((error) => {
